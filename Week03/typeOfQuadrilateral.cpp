@@ -1,14 +1,16 @@
 #include <iostream>
 #include "../vecta.h"
 
-double S(const vecta::vec2d<double>& A, const vecta::vec2d<double>& B, const vecta::vec2d<double>& C)
+typedef vecta::vec2d<double> Point;
+
+double S(const Point& A, const Point& B, const Point& C)
 {
     return (B - A) ^ (C - A); // AB x AC
 }
 
 int main()
 {
-    vecta::vec2d<double> A, B, C, D;
+    Point A, B, C, D;
     std::cin >> A >> B >> C >> D;
 
     if(((C - B) ^ (D - A)) != 0 && S(A, D, C) * S(A, D, B) < 0 && S(C, B, A) * S(C, B, D) < 0)
