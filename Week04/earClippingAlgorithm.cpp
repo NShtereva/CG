@@ -5,6 +5,25 @@
 
 typedef vecta::vec2d<double> Point;
 
+void readVertices(std::vector<Point>& vertices, const unsigned int n)
+{
+    for(unsigned i = 0; i < n; i++)
+    {
+        Point Vi;
+        std::cin >> Vi;
+
+        vertices.push_back(Vi);
+    }
+}
+
+void initIndexList(unsigned int* indexList, const unsigned int n)
+{
+    for(unsigned int i = 0; i < n; i++)
+    {
+        indexList[i] = i;
+    }
+}
+
 double STriangle(const Point& A, const Point& B, const Point& C)
 {
     return (B - A) ^ (C - A); // AB x AC
@@ -49,7 +68,7 @@ bool isEar(unsigned index1, unsigned index2, unsigned index3, const std::vector<
     return true;
 }
 
-void remove(unsigned indexList[], unsigned int& n, const unsigned int index)
+void remove(unsigned int* indexList, unsigned int& n, const unsigned int index)
 {
     for(unsigned i = index; i < n - 1; i++)
     {
@@ -58,41 +77,8 @@ void remove(unsigned indexList[], unsigned int& n, const unsigned int index)
     n--;
 }
 
-int main()
+void earClipping(const std::vector<Point>& vertices, unsigned int* indexList, unsigned int& n, std::vector<unsigned>& trianglesIndices)
 {
-    const unsigned int MAX_SIZE = 100;
-    unsigned int n;
-
-    do
-    {
-        std::cout << "Enter n: ";
-        std::cin >> n;
-    } while(n < 4 || n > MAX_SIZE);
-
-    std::vector<Point> vertices;
-    
-    for(unsigned i = 0; i < n; i++)
-    {
-        Point Vi;
-        std::cin >> Vi;
-
-        vertices.push_back(Vi);
-    }
-
-    // IsSimplePolyon?...
-
-    // ContainColinearEdges?...
-
-    // !VerticesAreOrderedClockWise? -> reverse
-
-    unsigned int indexList[MAX_SIZE];
-    for(unsigned int i = 0; i < n; i++)
-    {
-        indexList[i] = i;
-    }
-
-    std::vector<unsigned> trianglesIndices;
-
     unsigned int i = 0;
     while(n > 3)
     {
@@ -113,7 +99,10 @@ int main()
     trianglesIndices.push_back(indexList[0]);
     trianglesIndices.push_back(indexList[1]);
     trianglesIndices.push_back(indexList[2]);
+}
 
+void printTriangles(const std::vector<unsigned>& trianglesIndices)
+{
     unsigned int size = trianglesIndices.size();
 
     std::cout << std::endl;
@@ -123,7 +112,33 @@ int main()
                   << trianglesIndices[i + 1] << ' ' 
                   << trianglesIndices[i + 2] << std::endl;
     }
+}
 
+int main()
+{
+    const unsigned int MAX_SIZE = 100;
+    unsigned int n;
+
+    do
+    {
+        std::cout << "Enter n: ";
+        std::cin >> n;
+    } while(n < 4 || n > MAX_SIZE);
+
+    std::vector<Point> vertices;
+    readVertices(vertices, n);
+
+    // IsSimplePolyon?...
+    // ContainColinearEdges?...
+    // !VerticesAreOrderedClockWise? -> reverse
+
+    unsigned int indexList[MAX_SIZE];
+    initIndexList(indexList, n);
+
+    std::vector<unsigned> trianglesIndices;
+
+    earClipping(vertices, indexList, n, trianglesIndices);
+    printTriangles(trianglesIndices);
     return 0;
 }
 

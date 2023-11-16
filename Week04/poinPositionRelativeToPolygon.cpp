@@ -5,19 +5,8 @@
 
 typedef vecta::vec2d<double> Point;
 
-double S(const Point& A, const Point& B, const Point& C)
+void readVertices(std::vector<Point>& vertices, const unsigned int n)
 {
-    return (B - A) ^ (C - A); // AB x AC
-}
-
-int main()
-{
-    unsigned int n;
-    std::cout << "Enter n: ";
-    std::cin >> n;
-
-    std::vector<Point> vertices;
-
     std::cout << "Enter vertices:\n";
     for(unsigned i = 0; i < n; i++)
     {
@@ -26,11 +15,15 @@ int main()
 
         vertices.push_back(Vi);
     }
+}
 
-    Point P;
-    std::cout << "Enter point: ";
-    std::cin >> P;
+double S(const Point& A, const Point& B, const Point& C)
+{
+    return (B - A) ^ (C - A); // AB x AC
+}
 
+void printPointPosition(const std::vector<Point>& vertices, const unsigned int n, const Point& P)
+{
     Point I(INT_MAX, P.y);
     Point horizontalBeam = (I - P);
 
@@ -50,7 +43,7 @@ int main()
                 {
                     // т.P лежи върху отсечката на двата върха
                     std::cout << "on the contour" << std::endl;
-                    return 0;
+                    return;
                 }
             }
         }
@@ -67,13 +60,29 @@ int main()
                 else if(SViVjP == 0)
                 {
                     std::cout << "on the contour" << std::endl;
-                    return 0;
+                    return;
                 }
             }
         }
     }
 
     std::cout << ((crosssings % 2 == 0) ? "external point" : "interior point") << std::endl;
+}
+
+int main()
+{
+    unsigned int n;
+    std::cout << "Enter n: ";
+    std::cin >> n;
+
+    std::vector<Point> vertices;
+    readVertices(vertices, n);
+
+    Point P;
+    std::cout << "Enter point: ";
+    std::cin >> P;
+
+    printPointPosition(vertices, n, P);
     return 0;
 }
 
