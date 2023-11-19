@@ -5,6 +5,18 @@
 
 typedef vecta::vec2d<double> Point;
 
+void readPoints(std::vector<Point>& points, const unsigned int n)
+{
+    std::cout << "Enter points:\n";
+    for(unsigned i = 0; i < n; i++)
+    {
+        Point P;
+        std::cin >> P;
+
+        points.push_back(P);
+    }
+}
+
 unsigned basePointIndex(const std::vector<Point>& points, const unsigned int n)
 {
     unsigned min = 0;
@@ -79,15 +91,7 @@ int main()
     } while(n < 3 || n > MAX_SIZE);
 
     std::vector<Point> points;
-
-    std::cout << "Enter points:\n";
-    for(unsigned i = 0; i < n; i++)
-    {
-        Point Vi;
-        std::cin >> Vi;
-
-        points.push_back(Vi);
-    }
+    readPoints(points, n);
 
     unsigned int baseIndex = basePointIndex(points, n);
 
