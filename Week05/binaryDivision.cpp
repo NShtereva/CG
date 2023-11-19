@@ -19,14 +19,8 @@ bool isInTriangle(const Point& A, const Point& B, const Point& C, const Point& P
     return ((SPAB < 0 && SPBC < 0 && SPCA < 0) || (SPAB > 0 && SPBC > 0 && SPCA > 0));
 }
 
-int main()
+void readVertices(std::vector<Point>& vertices, const unsigned int n)
 {
-    unsigned int n;
-    std::cout << "Enter n: ";
-    std::cin >> n;
-
-    std::vector<Point> vertices;
-
     std::cout << "Enter vertices:\n";
     for(unsigned i = 0; i < n; i++)
     {
@@ -35,11 +29,10 @@ int main()
 
         vertices.push_back(Vi);
     }
+}
 
-    Point P;
-    std::cout << "Enter point: ";
-    std::cin >> P;
-
+void printPointPosition(const std::vector<Point>& vertices, const unsigned int n, const Point& P)
+{
     unsigned short base = 0, l = n - 1, r = 1;
 
     double SBLP = S(vertices[base], vertices[l], P), 
@@ -48,19 +41,19 @@ int main()
     if(SBLP > 0 || SBRP < 0)
     {
         std::cout << "external point" << std::endl;
-        return 0;
+        return;
     }
 
     if(SBRP == 0 && ((P - vertices[base]) * (P - vertices[r])) <= 0)
     {
         std::cout << "on the contour" << std::endl;
-        return 0;
+        return;
     }
 
     if(SBLP == 0 && ((P - vertices[base]) * (P - vertices[l])) <= 0)
     {
         std::cout << "on the contour" << std::endl;
-        return 0;
+        return;
     }
 
     while(l - r != 1)
@@ -81,7 +74,7 @@ int main()
     if(S(vertices[l], vertices[r], P) == 0 && ((P - vertices[l]) * (P - vertices[r])) <= 0)
     {
         std::cout << "on the contour" << std::endl;
-        return 0;
+        return;
     }
 
     if(isInTriangle(vertices[base], vertices[l], vertices[r], P) || 
@@ -89,9 +82,25 @@ int main()
        (S(vertices[base], vertices[r], P) == 0 && ((P - vertices[base]) * (P - vertices[r])) <= 0))
     {
         std::cout << "interior point" << std::endl;
-        return 0;
+        return;
     }
 
     std::cout << "external point" << std::endl;
+}
+
+int main()
+{
+    unsigned int n;
+    std::cout << "Enter n: ";
+    std::cin >> n;
+
+    std::vector<Point> vertices;
+    readVertices(vertices, n);
+
+    Point P;
+    std::cout << "Enter point: ";
+    std::cin >> P;
+
+    printPointPosition(vertices, n, P);
     return 0;
 }
